@@ -1,16 +1,26 @@
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.0"
+version = version_major + '.' + version_minor + '.' + version_patch
 group= "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "modnametooltip_" + mcversion
 
 minecraft {
-    version = "1.8-11.14.4.1563"
+    version = mcversion + "-" + forgeversion
     runDir = "run"
-
-    mappings = "snapshot_20141130"
+    replace '@VERSION@', project.version
+    mappings = "snapshot_20151122"
 }
 
 processResources
