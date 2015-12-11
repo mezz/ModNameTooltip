@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ModNameTooltip",
+  "name": "Mod Name Tooltip",
+  "description": "Show the ItemStack's mod on its tooltip.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/mezz/ModNameTooltip",
+  "updateUrl": "",
+  "authorList": ["mezz"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
