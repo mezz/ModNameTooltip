@@ -6,7 +6,7 @@
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/mezz/ModNameTooltip",
-  "updateUrl": "",
+  "updateUrl": "http://minecraft.curseforge.com/projects/mod-name-tooltip",
   "authorList": ["mezz"],
   "credits": "",
   "logoFile": "",
