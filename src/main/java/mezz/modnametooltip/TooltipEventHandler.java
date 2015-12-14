@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -45,6 +46,14 @@ public class TooltipEventHandler {
 		return modName;
 	}
 
+	@Nonnull
+	public String getModIDForItem(@Nonnull Item item) {
+		ResourceLocation itemResourceLocation = (ResourceLocation) GameData.getItemRegistry().getNameForObject(item);
+		String modId = itemResourceLocation.getResourceDomain();
+		String lowercaseModId = modId.toLowerCase(Locale.ENGLISH);
+		return lowercaseModId;
+	}
+
 	@SubscribeEvent
 	public void onToolTip(@Nonnull ItemTooltipEvent event) {
 		ItemStack itemStack = event.itemStack;
@@ -57,7 +66,10 @@ public class TooltipEventHandler {
 			return;
 		}
 
-		String modName = getModNameForItem(item);
-		event.toolTip.add(chatFormatting + modName);
+		if(GuiScreen.isShiftKeyDown()&&!event.showAdvancedItemTooltips){
+			event.toolTip.add(chatFormatting + "id: " + getModIDForItem(item));
+		}else{
+			event.toolTip.add(chatFormatting + getModNameForItem(item));
+		}
 	}
 }
