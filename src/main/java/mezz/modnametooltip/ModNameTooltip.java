@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 @Mod(
 		modid = ModNameTooltip.MODID,
 		version = ModNameTooltip.VERSION,
-		acceptedMinecraftVersions = "[1.8,1.8.9]",
+		acceptedMinecraftVersions = "[1.9,1.10)",
 		clientSideOnly = true
 )
 public class ModNameTooltip {
