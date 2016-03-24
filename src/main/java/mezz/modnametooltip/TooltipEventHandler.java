@@ -45,7 +45,7 @@ public class TooltipEventHandler {
 
 	@SubscribeEvent
 	public void onToolTip(@Nonnull ItemTooltipEvent event) {
-		ItemStack itemStack = event.itemStack;
+		ItemStack itemStack = event.getItemStack();
 		if (itemStack == null) {
 			return;
 		}
@@ -56,6 +56,6 @@ public class TooltipEventHandler {
 		}
 
 		String modName = getModNameForItem(item);
-		event.toolTip.add(chatFormatting + modName);
+		event.getToolTip().add(chatFormatting + modName);
 	}
 }
