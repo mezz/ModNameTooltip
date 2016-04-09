@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 		modid = ModNameTooltip.MODID,
 		version = ModNameTooltip.VERSION,
 		acceptedMinecraftVersions = "[1.9,1.10)",
-		dependencies = "required-after:Forge@[12.16.0.1805,);",
+		dependencies = "required-after:Forge@[12.16.0.1819,);",
 		clientSideOnly = true
 )
 public class ModNameTooltip {

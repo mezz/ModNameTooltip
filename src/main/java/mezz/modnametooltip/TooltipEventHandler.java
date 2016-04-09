@@ -8,7 +8,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameData;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
@@ -32,7 +31,7 @@ public class TooltipEventHandler {
 
 	@Nonnull
 	public String getModNameForItem(@Nonnull Item item) {
-		ResourceLocation itemResourceLocation = (ResourceLocation) GameData.getItemRegistry().getNameForObject(item);
+		ResourceLocation itemResourceLocation = Item.itemRegistry.getNameForObject(item);
 		String modId = itemResourceLocation.getResourceDomain();
 		String lowercaseModId = modId.toLowerCase(Locale.ENGLISH);
 		String modName = modNamesForIds.get(lowercaseModId);
