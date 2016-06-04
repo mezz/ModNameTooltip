@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -29,9 +30,12 @@ public class TooltipEventHandler {
 		}
 	}
 
-	@Nonnull
+	@Nullable
 	public String getModNameForItem(@Nonnull Item item) {
-		ResourceLocation itemResourceLocation = Item.itemRegistry.getNameForObject(item);
+		ResourceLocation itemResourceLocation = Item.REGISTRY.getNameForObject(item);
+		if (itemResourceLocation == null) {
+			return null;
+		}
 		String modId = itemResourceLocation.getResourceDomain();
 		String lowercaseModId = modId.toLowerCase(Locale.ENGLISH);
 		String modName = modNamesForIds.get(lowercaseModId);
@@ -55,6 +59,8 @@ public class TooltipEventHandler {
 		}
 
 		String modName = getModNameForItem(item);
-		event.getToolTip().add(chatFormatting + modName);
+		if (modName != null) {
+			event.getToolTip().add(chatFormatting + modName);
+		}
 	}
 }
