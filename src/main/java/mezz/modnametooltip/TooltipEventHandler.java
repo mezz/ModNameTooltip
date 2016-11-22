@@ -1,66 +1,46 @@
 package mezz.modnametooltip;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.text.WordUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class TooltipEventHandler {
-	private static final String chatFormatting = TextFormatting.BLUE.toString() + TextFormatting.ITALIC.toString();
-
-	private final Map<String, String> modNamesForIds = new HashMap<String, String>();
-
-	public TooltipEventHandler() {
-		Map<String, ModContainer> modMap = Loader.instance().getIndexedModList();
-		for (Map.Entry<String, ModContainer> modEntry : modMap.entrySet()) {
-			String lowercaseId = modEntry.getKey().toLowerCase(Locale.ENGLISH);
-			String modName = modEntry.getValue().getName();
-			modNamesForIds.put(lowercaseId, modName);
-		}
-	}
-
 	@Nullable
-	public String getModNameForItem(@Nonnull Item item) {
-		ResourceLocation itemResourceLocation = Item.REGISTRY.getNameForObject(item);
-		if (itemResourceLocation == null) {
-			return null;
+	public String getModNameForItem(Item item) {
+		if (ForgeRegistries.ITEMS.containsValue(item)) {
+			ResourceLocation itemResourceLocation = ForgeRegistries.ITEMS.getKey(item);
+			String modId = itemResourceLocation.getResourceDomain();
+			ModContainer modContainer = Loader.instance().getIndexedModList().get(modId);
+			if (modContainer != null) {
+				return modContainer.getName();
+			} else if (modId.equals("minecraft")) {
+				return "Minecraft";
+			}
 		}
-		String modId = itemResourceLocation.getResourceDomain();
-		String lowercaseModId = modId.toLowerCase(Locale.ENGLISH);
-		String modName = modNamesForIds.get(lowercaseModId);
-		if (modName == null) {
-			modName = WordUtils.capitalize(modId);
-			modNamesForIds.put(lowercaseModId, modName);
-		}
-		return modName;
+		return null;
 	}
 
 	@SubscribeEvent
-	public void onToolTip(@Nonnull ItemTooltipEvent event) {
-		ItemStack itemStack = event.getItemStack();
-		if (itemStack == null) {
-			return;
-		}
-
-		Item item = itemStack.getItem();
-		if (item == null) {
-			return;
-		}
-
-		String modName = getModNameForItem(item);
-		if (modName != null) {
-			event.getToolTip().add(chatFormatting + modName);
+	public void onToolTip(ItemTooltipEvent event) {
+		Config config = ModNameTooltip.config;
+		if (config != null) {
+			String modNameFormat = config.getModNameFormat();
+			if (!modNameFormat.isEmpty()) {
+				ItemStack itemStack = event.getItemStack();
+				if (!itemStack.isEmpty()) {
+					String modName = getModNameForItem(itemStack.getItem());
+					if (modName != null) {
+						event.getToolTip().add(modNameFormat + modName);
+					}
+				}
+			}
 		}
 	}
 }

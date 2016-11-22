@@ -20,7 +20,7 @@ minecraft {
     version = mcversion + "-" + forgeversion
     runDir = "run"
     replace '@VERSION@', project.version
-    mappings = "snapshot_20160525"
+    mappings = mcp_mappings
 }
 
 processResources

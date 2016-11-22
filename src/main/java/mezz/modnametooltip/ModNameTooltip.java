@@ -1,29 +1,43 @@
 package mezz.modnametooltip;
 
+import javax.annotation.Nullable;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(
 		modid = ModNameTooltip.MODID,
+		name = "Mod Name Tooltip",
 		version = ModNameTooltip.VERSION,
-		acceptedMinecraftVersions = "[1.9,1.10]",
-		dependencies = "required-after:Forge@[12.16.0.1819,);",
+		acceptedMinecraftVersions = "[1.11,)",
+		guiFactory = "mezz.modnametooltip.ConfigGuiFactory",
 		clientSideOnly = true
 )
 public class ModNameTooltip {
-	public static final String MODID = "ModNameTooltip";
+	public static final String MODID = "modnametooltip";
 	public static final String VERSION = "@VERSION@";
+
+	@Nullable
+	public static Config config;
+
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		config = new Config(event);
+		MinecraftForge.EVENT_BUS.register(config);
+	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		if (Loader.isModLoaded("Waila")) {
+		if (Loader.isModLoaded("waila")) {
 			FMLLog.warning("Waila detected. It also adds the Mod Name to the Tooltip. Deactivating " + MODID + '.');
 			return;
 		}
+
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler();
 		MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
 	}
