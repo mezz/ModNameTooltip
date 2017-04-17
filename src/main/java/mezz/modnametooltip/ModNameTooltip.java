@@ -3,8 +3,6 @@ package mezz.modnametooltip;
 import javax.annotation.Nullable;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -33,11 +31,6 @@ public class ModNameTooltip {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		if (Loader.isModLoaded("waila")) {
-			FMLLog.warning("Waila detected. It also adds the Mod Name to the Tooltip. Deactivating " + MODID + '.');
-			return;
-		}
-
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler();
 		MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
 	}
