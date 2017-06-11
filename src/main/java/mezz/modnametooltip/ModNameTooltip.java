@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 		modid = ModNameTooltip.MODID,
 		name = "Mod Name Tooltip",
 		version = ModNameTooltip.VERSION,
-		acceptedMinecraftVersions = "[1.11,)",
+		acceptedMinecraftVersions = "[1.12,)",
 		guiFactory = "mezz.modnametooltip.ConfigGuiFactory",
 		clientSideOnly = true
 )

@@ -40,8 +40,6 @@ public class TooltipEventHandler {
 				ModContainer modContainer = Loader.instance().getIndexedModList().get(modId);
 				if (modContainer != null) {
 					return modContainer.getName();
-				} else if (modId.equals("minecraft")) {
-					return "Minecraft";
 				}
 			}
 		}
