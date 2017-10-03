@@ -2,17 +2,16 @@ package mezz.modnametooltip;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class TooltipEventHandler {
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -34,10 +33,10 @@ public class TooltipEventHandler {
 	private static String getModName(ItemStack itemStack) {
 		if (!itemStack.isEmpty()) {
 			Item item = itemStack.getItem();
-			if (ForgeRegistries.ITEMS.containsValue(item)) {
-				ResourceLocation itemResourceLocation = ForgeRegistries.ITEMS.getKey(item);
-				String modId = itemResourceLocation.getResourceDomain();
-				ModContainer modContainer = Loader.instance().getIndexedModList().get(modId);
+			String modId = item.getCreatorModId(itemStack);
+			if (modId != null) {
+				Map<String, ModContainer> indexedModList = Loader.instance().getIndexedModList();
+				ModContainer modContainer = indexedModList.get(modId);
 				if (modContainer != null) {
 					return modContainer.getName();
 				}
