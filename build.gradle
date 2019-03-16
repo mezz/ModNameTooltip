@@ -1,44 +1,57 @@
 buildscript {
     repositories {
+        maven { url = "https://files.minecraftforge.net/maven" }
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "3.+", changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "net.minecraftforge.gradle"
 
 version = version_major + '.' + version_minor + '.' + version_patch
-group= "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "modnametooltip_" + mcversion
 
-minecraft {
-    version = mcversion + "-" + forgeversion
-    runDir = "run"
-    replace '@VERSION@', project.version
-    mappings = mcp_mappings
+dependencies {
+    minecraft([
+            group  : "${project.forgegroup}",
+            name   : "forge",
+            version: "${project.mcversion}-${project.forgeversion}"
+    ])
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+minecraft {
+    mappings channel: "snapshot", version: "${project.mcp_mappings}".toString()
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+    runs {
+        client = {
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        server = {
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
     }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+}
+
+jar {
+    from sourceSets.main.output.classesDirs
+    from sourceSets.main.output.resourcesDir
+
+    manifest {
+        attributes([
+                "Specification-Title": "Mod Name Tooltip",
+                "Specification-Vendor": "mezz",
+                "Specification-Version": "${project.version}",
+                "Implementation-Title": project.name,
+                "Implementation-Version": "${project.version}",
+                "Implementation-Vendor" :"mezz",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+        ])
     }
 }

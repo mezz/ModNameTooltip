@@ -1,84 +1,76 @@
 package mezz.modnametooltip;
 
-import java.io.File;
-import java.util.Arrays;
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Config {
+	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String CATEGORY_FORMATTING = "formatting";
-	private static final String defaultModNameFormatFriendly = "blue italic";
 
-	private final Configuration config;
-	private String modNameFormat = parseFriendlyModNameFormat(defaultModNameFormatFriendly);
+	private final ForgeConfigSpec config;
+	private final ConfigValue<String> modNameFormatFriendly;
+	@Nullable
+	private String cachedModNameFormat;
 
-	public Config(FMLPreInitializationEvent event) {
-		final File configFile = new File(event.getModConfigurationDirectory(), ModNameTooltip.MODID + ".cfg");
-		config = new Configuration(configFile, "1.0.0");
-
-		loadConfig();
-	}
-
-	private void loadConfig() {
+	public Config() {
+		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		EnumSet<TextFormatting> validFormatting = EnumSet.allOf(TextFormatting.class);
 		validFormatting.remove(TextFormatting.RESET);
-		String[] validValues = new String[validFormatting.size()];
-		int i = 0;
-		for (TextFormatting formatting : validFormatting) {
-			validValues[i] = formatting.getFriendlyName().toLowerCase(Locale.ENGLISH);
-			i++;
-		}
+		String validValues = validFormatting.stream()
+			.map(formatting -> formatting.getFriendlyName().toLowerCase(Locale.ENGLISH))
+			.collect(Collectors.joining(", "));
 
-		Property prop = config.get(CATEGORY_FORMATTING, "modNameFormat", defaultModNameFormatFriendly);
-		prop.setLanguageKey("config.modnametooltip.formatting.modNameFormat");
-		prop.setComment(I18n.format("config.modnametooltip.formatting.modNameFormat.comment", Arrays.toString(validValues)));
+		builder.push(CATEGORY_FORMATTING);
+		modNameFormatFriendly = builder
+			.comment("How the mod name should be formatted in the tooltip. Leave blank to disable. Valid values:", validValues)
+			.translation("config.modnametooltip.formatting.modNameFormat")
+			.define("modNameFormat", "blue italic");
 
-		String modNameFormatFriendly = prop.getString();
-		modNameFormat = parseFriendlyModNameFormat(modNameFormatFriendly);
-
-		if (config.hasChanged()) {
-			config.save();
-		}
+		config = builder.build();
 	}
 
-	public Configuration getConfig() {
+	public ForgeConfigSpec getConfigSpec() {
 		return config;
 	}
 
 	public String getModNameFormat() {
-		return modNameFormat;
+		if (cachedModNameFormat == null) {
+			cachedModNameFormat = parseFriendlyModNameFormat(modNameFormatFriendly.get());
+		}
+		return cachedModNameFormat;
 	}
 
 	private static String parseFriendlyModNameFormat(String formatWithEnumNames) {
-		String format = "";
 		if (formatWithEnumNames.isEmpty()) {
-			return format;
+			return "";
 		}
+		StringBuilder format = new StringBuilder();
 		String[] strings = formatWithEnumNames.split(" ");
 		for (String string : strings) {
 			TextFormatting valueByName = TextFormatting.getValueByName(string);
 			if (valueByName != null) {
-				format += valueByName.toString();
+				format.append(valueByName.toString());
 			} else {
-				FMLLog.severe("Invalid format: " + string);
+				LOGGER.error("Invalid format: " + string);
 			}
 		}
-		return format;
+		return format.toString();
 	}
 
-	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if (ModNameTooltip.MODID.equals(eventArgs.getModID())) {
-			loadConfig();
+		if (ModNameTooltip.MOD_ID.equals(eventArgs.getModID())) {
+			cachedModNameFormat = null;
 		}
 	}
 }

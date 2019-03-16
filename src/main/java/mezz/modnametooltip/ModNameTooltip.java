@@ -1,38 +1,36 @@
 package mezz.modnametooltip;
 
-import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 
-@Mod(
-		modid = ModNameTooltip.MODID,
-		name = "Mod Name Tooltip",
-		version = ModNameTooltip.VERSION,
-		acceptedMinecraftVersions = "[1.12.2,)",
-		dependencies = "required-after:forge@[14.23.0.2500,);",
-		guiFactory = "mezz.modnametooltip.ConfigGuiFactory",
-		clientSideOnly = true
-)
+@Mod(ModNameTooltip.MOD_ID)
 public class ModNameTooltip {
-	public static final String MODID = "modnametooltip";
-	public static final String VERSION = "@VERSION@";
+	public static final String MOD_ID = "modnametooltip";
 
-	@Nullable
-	public static Config config;
+	public ModNameTooltip() {
+		DistExecutor.runWhenOn(Dist.CLIENT, ()->()-> {
+			Config config = new Config();
+			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, config.getConfigSpec());
+			TooltipEventHandler tooltipEventHandler = new TooltipEventHandler(config);
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		config = new Config(event);
-		MinecraftForge.EVENT_BUS.register(config);
+			IEventBus eventBus = MinecraftForge.EVENT_BUS;
+			addListener(eventBus, ConfigChangedEvent.OnConfigChangedEvent.class, config::onConfigChanged);
+			addListener(eventBus, ItemTooltipEvent.class, tooltipEventHandler::onToolTip);
+		});
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler();
-		MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
+	private static <T extends Event> void addListener(IEventBus eventBus, Class<T> eventType, Consumer<T> listener) {
+		eventBus.addListener(EventPriority.NORMAL, false, eventType, listener);
 	}
 }
