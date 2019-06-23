@@ -23,18 +23,26 @@ dependencies {
 }
 
 minecraft {
-    mappings channel: "snapshot", version: "${project.mcp_mappings}".toString()
+    mappings channel: "snapshot", version: project.mcp_mappings
 
     runs {
-        client = {
+        client {
             properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+            workingDirectory project.file('run')
+            mods {
+                modnametooltip {
+                    source sourceSets.main
+                }
+            }
         }
-        server = {
+        server {
             properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run').canonicalPath
-            source sourceSets.main
+            workingDirectory project.file('run')
+            mods {
+                modnametooltip {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
