@@ -1,0 +1,4 @@
+{
+    "config.modnametooltip.formatting.modNameFormat": "Format nazwy moda",
+    "config.modnametooltip.formatting.modNameFormat.comment": "Określa, jak powinna być sformatowana nazwa moda w tooltipach. Pozostaw puste, aby wyłączyć."
+}
