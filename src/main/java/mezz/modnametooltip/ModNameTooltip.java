@@ -25,12 +25,12 @@ public class ModNameTooltip {
 			TooltipEventHandler tooltipEventHandler = new TooltipEventHandler(config);
 
 			IEventBus eventBus = MinecraftForge.EVENT_BUS;
-			addListener(eventBus, ConfigChangedEvent.OnConfigChangedEvent.class, config::onConfigChanged);
-			addListener(eventBus, ItemTooltipEvent.class, tooltipEventHandler::onToolTip);
+			addListener(eventBus, ConfigChangedEvent.OnConfigChangedEvent.class, EventPriority.NORMAL, config::onConfigChanged);
+			addListener(eventBus, ItemTooltipEvent.class, EventPriority.LOW, tooltipEventHandler::onToolTip);
 		});
 	}
 
-	private static <T extends Event> void addListener(IEventBus eventBus, Class<T> eventType, Consumer<T> listener) {
-		eventBus.addListener(EventPriority.NORMAL, false, eventType, listener);
+	private static <T extends Event> void addListener(IEventBus eventBus, Class<T> eventType, EventPriority priority, Consumer<T> listener) {
+		eventBus.addListener(priority, false, eventType, listener);
 	}
 }
