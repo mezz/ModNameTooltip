@@ -9,6 +9,7 @@ buildscript {
     }
 }
 apply plugin: "net.minecraftforge.gradle"
+apply plugin: 'eclipse'
 
 version = version_major + '.' + version_minor + '.' + version_patch
 group = "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
