@@ -21,7 +21,7 @@ license="MIT" #mandatory
 issueTrackerURL="https://github.com/mezz/ModNameTooltip/issues?q=is%3Aissue" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="https://minecraft.curseforge.com/projects/mod-name-tooltip" #optional
+displayURL="https://curseforge.com/minecraft/mc-mods/mod-name-tooltip" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
 #logoFile="examplemod.png" #optional
