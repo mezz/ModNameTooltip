@@ -7,7 +7,12 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the minecraft version (without the 1.)
-loaderVersion="[31,)" #mandatory
+loaderVersion="[33,)" #mandatory
+
+# The license for you mod. This is mandatory metadata and allows for easier comprehension of your
+# redistributive properties. Review your options at https://choosealicense.com/. All rights
+# reserved is the default copyright stance, and is thus the default here.
+license="MIT" #mandatory
 
 # A URL to query for updates for this mod. See the JSON update specification <here>
 #updateJSONURL="" #optional
@@ -16,7 +21,7 @@ loaderVersion="[31,)" #mandatory
 issueTrackerURL="https://github.com/mezz/ModNameTooltip/issues?q=is%3Aissue" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="https://minecraft.curseforge.com/projects/mod-name-tooltip" #optional
+displayURL="https://curseforge.com/minecraft/mc-mods/mod-name-tooltip" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
 #logoFile="examplemod.png" #optional
@@ -48,7 +53,7 @@ Shows the mod an ItemStack is from on its tooltip.
 [[dependencies.modnametooltip]]
     modId="forge" #mandatory
     mandatory=false #mandatory
-    versionRange="[31,)" #mandatory
+    versionRange="[33,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
