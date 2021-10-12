@@ -3,13 +3,13 @@ package mezz.modnametooltip;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,9 +26,9 @@ public class TooltipEventHandler {
 			ItemStack itemStack = event.getItemStack();
 			String modName = getModName(itemStack);
 			if (modName != null) {
-				List<ITextComponent> toolTip = event.getToolTip();
+				var toolTip = event.getToolTip();
 				if (!isModNameAlreadyPresent(toolTip, modName)) {
-					toolTip.add(new StringTextComponent(modNameFormat + modName));
+					toolTip.add(new TextComponent(modNameFormat + modName));
 				}
 			}
 		}
@@ -48,11 +48,11 @@ public class TooltipEventHandler {
 		return null;
 	}
 
-	private static boolean isModNameAlreadyPresent(List<ITextComponent> tooltip, String modName) {
+	private static boolean isModNameAlreadyPresent(List<Component> tooltip, String modName) {
 		if (tooltip.size() > 1) {
-			ITextComponent line = tooltip.get(tooltip.size() - 1);
+			Component line = tooltip.get(tooltip.size() - 1);
 			String lineString = line.getString();
-			String withoutFormatting = TextFormatting.getTextWithoutFormattingCodes(lineString);
+			String withoutFormatting = ChatFormatting.stripFormatting(lineString);
 			return modName.equals(withoutFormatting);
 		}
 		return false;

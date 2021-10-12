@@ -1,66 +1,99 @@
 buildscript {
     repositories {
         maven { url = "https://files.minecraftforge.net/maven" }
-        jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "3.+", changing: true
+        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: '5.1.+', changing: true
     }
 }
-apply plugin: "net.minecraftforge.gradle"
-apply plugin: 'eclipse'
 
-version = version_major + '.' + version_minor + '.' + version_patch
-group = "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modnametooltip_" + mcversion
-
-dependencies {
-    minecraft([
-            group  : "${project.forgegroup}",
-            name   : "forge",
-            version: "${project.mcversion}-${project.forgeversion}"
-    ])
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
 }
+apply plugin: "net.minecraftforge.gradle"
+
+// these are required for the java plugin to generate jar files with a version
+version = "${version_major}.${version_minor}.${version_patch}"
+group = 'mezz.modnametooltip' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "modnametooltip-${minecraft_version}"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: "snapshot", version: project.mcp_mappings
+    mappings channel: 'official', version: project.minecraft_version
 
     runs {
         client {
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+            workingDirectory file('run')
             mods {
                 modnametooltip {
-                    source sourceSets.main
+                    sources sourceSets.main
                 }
             }
         }
         server {
-            properties 'forge.logging.console.level': 'debug'
-            workingDirectory project.file('run')
+            property 'forge.logging.console.level', 'debug'
+            workingDirectory file('run')
             mods {
                 modnametooltip {
-                    source sourceSets.main
+                    sources sourceSets.main
                 }
             }
         }
     }
 }
 
-jar {
-    from sourceSets.main.output.classesDirs
-    from sourceSets.main.output.resourcesDir
+dependencies {
+    minecraft([
+            group  : "${project.forge_group}",
+            name   : "forge",
+            version: "${project.minecraft_version}-${project.forge_version}"
+    ])
+}
 
+jar {
     manifest {
         attributes([
-                "Specification-Title": "Mod Name Tooltip",
-                "Specification-Vendor": "mezz",
-                "Specification-Version": "${project.version}",
-                "Implementation-Title": project.name,
-                "Implementation-Version": "${project.version}",
-                "Implementation-Vendor" :"mezz",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'Specification-Title'     : 'Mod Name Tooltip',
+                'Specification-Vendor'    : 'mezz',
+                'Specification-Version'   : "${project.version}",
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : "${project.version}",
+                'Implementation-Vendor'   : 'mezz',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "Automatic-Module-Name"   : "mezz.modnametooltip",
         ])
+    }
+}
+
+def replaceResources = tasks.register("replaceResources", Copy) {
+    it.outputs.upToDateWhen { false }
+    // Copy it into the build dir
+    it.from(sourceSets.main.resources) {
+        include "META-INF/mods.toml"
+        expand 'version': version, 'mc_version': minecraft_version_range, 'forge_version': forge_version_range, "loader_version": loader_version_range
+    }
+    it.into "$buildDir/resources/main/"
+}
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    exclude('META-INF/mods.toml')
+    configure { finalizedBy(replaceResources) }
+}
+
+classes.configure {
+    dependsOn(replaceResources)
+}
+
+idea {
+    module {
+        for (String exclude in ['run', 'out', 'logs']) {
+            excludeDirs += file(exclude)
+        }
     }
 }
