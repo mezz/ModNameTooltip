@@ -1,0 +1,4 @@
+{
+    "config.modnametooltip.formatting.modNameFormat": "Формат названия мода",
+    "config.modnametooltip.formatting.modNameFormat.comment": "Как должно название мода быть форматированным в подсказке. Оставь пустым для отключения."
+}
