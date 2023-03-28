@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class TooltipEventHandler {
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -55,7 +56,7 @@ public class TooltipEventHandler {
 			}
 
 			if (item.getRegistryName() != null) {
-				return item.getRegistryName().getResourceDomain();
+				return WordUtils.capitalize(item.getRegistryName().getResourceDomain());
 			}
 		}
 		return null;
