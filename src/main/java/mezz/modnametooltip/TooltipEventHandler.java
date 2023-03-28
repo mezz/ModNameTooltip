@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,9 +39,11 @@ public class TooltipEventHandler {
 			Item item = itemStack.getItem();
 
 			// Override for Groovyscript
-			if (Objects.requireNonNull(item.getRegistryName()).getResourceDomain().equals(
-					GroovyScript.getRunConfig().getPackId()))
-				return GroovyScript.getRunConfig().getPackName();
+			if (ModNameTooltip.isGroovyLoaded()){
+				if (Objects.requireNonNull(item.getRegistryName()).getResourceDomain().equals(
+						GroovyScript.getRunConfig().getPackId()))
+					return GroovyScript.getRunConfig().getPackName();
+			}
 
 			String modId = item.getCreatorModId(itemStack);
 			if (modId != null) {

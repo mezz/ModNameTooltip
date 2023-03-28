@@ -3,6 +3,7 @@ package mezz.modnametooltip;
 import javax.annotation.Nullable;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -24,15 +25,22 @@ public class ModNameTooltip {
 	@Nullable
 	public static Config config;
 
+	private static boolean isGroovyLoaded = false;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		config = new Config(event);
 		MinecraftForge.EVENT_BUS.register(config);
+		isGroovyLoaded = Loader.instance().getIndexedModList().keySet().contains("groovyscript");
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler();
 		MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
+	}
+
+	public static boolean isGroovyLoaded(){
+		return isGroovyLoaded;
 	}
 }
