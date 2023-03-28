@@ -31,7 +31,7 @@ public class ModNameTooltip {
 	public void preInit(FMLPreInitializationEvent event) {
 		config = new Config(event);
 		MinecraftForge.EVENT_BUS.register(config);
-		isGroovyLoaded = Loader.instance().getIndexedModList().keySet().contains("groovyscript");
+		isGroovyLoaded = Loader.isModLoaded("groovyscript");
 	}
 
 	@EventHandler
