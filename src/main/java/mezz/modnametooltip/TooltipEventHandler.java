@@ -53,6 +53,10 @@ public class TooltipEventHandler {
 					return modContainer.getName();
 				}
 			}
+
+			if (item.getRegistryName() != null) {
+				return item.getRegistryName().getResourceDomain();
+			}
 		}
 		return null;
 	}
