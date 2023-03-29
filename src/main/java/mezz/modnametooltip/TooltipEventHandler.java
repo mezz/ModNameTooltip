@@ -3,16 +3,13 @@ package mezz.modnametooltip;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.sandbox.RunConfig;
+import mezz.modnametooltip.compat.GroovyScriptCompat;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,11 +37,10 @@ public class TooltipEventHandler {
 			Item item = itemStack.getItem();
 
 			// Override for Groovyscript
-			if (ModNameTooltip.isGroovyLoaded()){
-				if (Objects.requireNonNull(item.getRegistryName()).getResourceDomain().equals(
-						GroovyScript.getRunConfig().getPackId()))
-					return GroovyScript.getRunConfig().getPackName();
-			}
+			String groovyName = GroovyScriptCompat.getName(item);
+
+			if (groovyName != null)
+				return groovyName;
 
 			String modId = item.getCreatorModId(itemStack);
 			if (modId != null) {
