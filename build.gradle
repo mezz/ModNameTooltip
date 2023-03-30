@@ -18,16 +18,6 @@ version = version_major + '.' + version_minor + '.' + version_patch
 group= "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "modnametooltip_" + mcversion
 
-repositories {
-    maven {
-        url "https://cursemaven.com"
-    }
-}
-
-dependencies {
-    compile "curse.maven:groovyscript-687577:4457579"
-}
-
 minecraft {
     version = mcversion + "-" + forgeversion
     runDir = "run"
