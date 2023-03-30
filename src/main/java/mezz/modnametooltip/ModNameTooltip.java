@@ -25,22 +25,15 @@ public class ModNameTooltip {
 	@Nullable
 	public static Config config;
 
-	private static boolean isGroovyLoaded = false;
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		config = new Config(event);
 		MinecraftForge.EVENT_BUS.register(config);
-		isGroovyLoaded = Loader.isModLoaded("groovyscript");
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler();
 		MinecraftForge.EVENT_BUS.register(tooltipEventHandler);
-	}
-
-	public static boolean isGroovyLoaded(){
-		return isGroovyLoaded;
 	}
 }

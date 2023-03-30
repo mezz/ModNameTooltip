@@ -36,12 +36,6 @@ public class TooltipEventHandler {
 		if (!itemStack.isEmpty()) {
 			Item item = itemStack.getItem();
 
-			// Override for Groovyscript
-			String groovyName = GroovyScriptCompat.getName(item);
-
-			if (groovyName != null)
-				return groovyName;
-
 			String modId = item.getCreatorModId(itemStack);
 			if (modId != null) {
 				Map<String, ModContainer> indexedModList = Loader.instance().getIndexedModList();
