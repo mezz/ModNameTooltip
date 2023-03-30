@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import mezz.modnametooltip.compat.GroovyScriptCompat;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
