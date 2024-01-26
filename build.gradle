@@ -1,20 +1,32 @@
 buildscript {
     repositories {
-        jcenter()
         maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = 'https://maven.minecraftforge.net'
+        }
+        maven {
+            url = 'https://repo.spongepowered.org/maven'
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3.4'
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = version_major + '.' + version_minor + '.' + version_patch
 group= "mezz.modnametooltip" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "modnametooltip_" + mcversion
+
+repositories {
+    maven {
+        url "https://cursemaven.com"
+    }
+}
+
+dependencies {
+    compile "curse.maven:groovyscript-687577:4457579"
+}
 
 minecraft {
     version = mcversion + "-" + forgeversion

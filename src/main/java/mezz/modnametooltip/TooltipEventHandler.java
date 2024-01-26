@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.commons.lang3.text.WordUtils;
 
 public class TooltipEventHandler {
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -33,6 +34,7 @@ public class TooltipEventHandler {
 	private static String getModName(ItemStack itemStack) {
 		if (!itemStack.isEmpty()) {
 			Item item = itemStack.getItem();
+
 			String modId = item.getCreatorModId(itemStack);
 			if (modId != null) {
 				Map<String, ModContainer> indexedModList = Loader.instance().getIndexedModList();
@@ -40,6 +42,10 @@ public class TooltipEventHandler {
 				if (modContainer != null) {
 					return modContainer.getName();
 				}
+			}
+
+			if (item.getRegistryName() != null) {
+				return WordUtils.capitalize(item.getRegistryName().getResourceDomain());
 			}
 		}
 		return null;
