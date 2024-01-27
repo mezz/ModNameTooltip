@@ -1,0 +1,4 @@
+{
+    "config.modnametooltip.formatting.modNameFormat": "Formato do nome do mod",
+    "config.modnametooltip.formatting.modNameFormat.comment": "Como o nome do mod deve ser formatado na dica de ferramenta. Deixe em branco para desativar."
+}
