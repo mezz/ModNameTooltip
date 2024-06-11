@@ -17,12 +17,12 @@ import java.util.function.Consumer;
 
 @Mod("modnametooltip")
 public class ModNameTooltipClient {
-	public ModNameTooltipClient() {
+	public ModNameTooltipClient(IEventBus modBus) {
 		Config config = new Config();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, config.getConfigSpec());
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler(config);
 		IEventBus eventBus = NeoForge.EVENT_BUS;
-		addListener(eventBus, ModConfigEvent.class, EventPriority.NORMAL, config::onConfigChanged);
+		addListener(modBus, ModConfigEvent.class, EventPriority.NORMAL, config::onConfigChanged);
 		addListener(eventBus, ItemTooltipEvent.class, EventPriority.LOW, tooltipEventHandler::onToolTip);
 	}
 	private static <T extends Event> void addListener(IEventBus eventBus, Class<T> eventType, EventPriority priority, Consumer<T> listener) {
