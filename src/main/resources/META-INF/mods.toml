@@ -38,6 +38,8 @@ authors="mezz" #optional
 # The modid of the mod
 modId="modnametooltip" #mandatory
 
+displayTest="IGNORE_ALL_VERSION"
+
 # The version number of the mod
 version="${mod_version}" #mandatory
 
@@ -52,16 +54,16 @@ On ItemStack tooltips, shows which mod the item is from.
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.modnametooltip]]
     modId="neoforge" #mandatory
-    mandatory=true #mandatory
+
     versionRange="${neo_version_range}" #mandatory
 	# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 	ordering="NONE"
 	# Side this dependency is applied on - BOTH, CLIENT or SERVER
 	side="BOTH"
+
 [[dependencies.modnametooltip]]
 	modId="minecraft" #mandatory
-	mandatory=true #mandatory
-	versionRange="${minecraft_version}" #mandatory
+	versionRange="[1.20.4,1.21)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
