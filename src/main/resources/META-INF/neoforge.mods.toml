@@ -7,7 +7,7 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the minecraft version (without the 1.)
-loaderVersion="${loader_version}" #mandatory
+loaderVersion="${neo_version}" #mandatory
 
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your
 # redistributive properties. Review your options at https://choosealicense.com/. All rights
@@ -39,7 +39,7 @@ authors="mezz" #optional
 modId="modnametooltip" #mandatory
 
 # The version number of the mod
-version="${version}" #mandatory
+version="${mod_version}" #mandatory
 
 # A display name for the mod
 displayName="Mod Name Tooltip" #mandatory
@@ -51,18 +51,17 @@ On ItemStack tooltips, shows which mod the item is from.
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.modnametooltip]]
-    modId="forge" #mandatory
-    mandatory=false #mandatory
-    versionRange="${forge_version}" #mandatory
+    modId="neoforge" #mandatory
+    mandatory=true #mandatory
+    versionRange="${neo_version_range}" #mandatory
 	# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 	ordering="NONE"
 	# Side this dependency is applied on - BOTH, CLIENT or SERVER
 	side="BOTH"
-
 [[dependencies.modnametooltip]]
 	modId="minecraft" #mandatory
 	mandatory=true #mandatory
-	versionRange="${mc_version}" #mandatory
+	versionRange="${minecraft_version}" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

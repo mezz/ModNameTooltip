@@ -1,25 +1,32 @@
 package mezz.modnametooltip;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.function.Consumer;
 
+@Mod("modnametooltip")
+@OnlyIn(Dist.CLIENT)
 public class ModNameTooltipClient {
-	public static void run() {
+	public static void run(IEventBus modeventbus) {
 		Config config = new Config();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, config.getConfigSpec());
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler(config);
-
-		IEventBus eventBus = MinecraftForge.EVENT_BUS;
-		addListener(eventBus, ModConfigEvent.class, EventPriority.NORMAL, config::onConfigChanged);
-		addListener(eventBus, ItemTooltipEvent.class, EventPriority.LOW, tooltipEventHandler::onToolTip);
+		//IEventBus eventBus = NeoForge.EVENT_BUS;
+		//addListener(eventBus, ModConfigEvent.class, EventPriority.NORMAL, config::onConfigChanged);
+		//addListener(eventBus, ItemTooltipEvent.class, EventPriority.LOW, tooltipEventHandler::onToolTip);
+		modeventbus.addListener(config::onConfigChanged);
+		modeventbus.addListener(tooltipEventHandler::onToolTip);
 	}
 
 	private static <T extends Event> void addListener(IEventBus eventBus, Class<T> eventType, EventPriority priority, Consumer<T> listener) {
