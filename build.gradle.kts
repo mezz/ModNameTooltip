@@ -40,12 +40,6 @@ java {
     }
 }
 
-minecraft {
-    // Copies the files from 'processResources' to the IDE's resource output directories
-    // TODO
-//    copyIdeResources = true
-}
-
 // Default run configurations.
 // These can be tweaked, removed, or duplicated as needed.
 runs {
