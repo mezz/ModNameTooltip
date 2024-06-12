@@ -1,29 +1,27 @@
 package mezz.modnametooltip;
 
+import net.minecraft.ChatFormatting;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.StringJoiner;
 
-import net.minecraft.ChatFormatting;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 public class Config {
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String CATEGORY_FORMATTING = "formatting";
 
-	private final ForgeConfigSpec config;
-	private final ConfigValue<String> modNameFormatFriendly;
+	private final ModConfigSpec config;
+	private final ModConfigSpec.ConfigValue<String> modNameFormatFriendly;
 	@Nullable
 	private String cachedModNameFormat;
 
 	public Config() {
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
 		EnumSet<ChatFormatting> validFormatting = EnumSet.allOf(ChatFormatting.class);
 		validFormatting.remove(ChatFormatting.RESET);
@@ -54,7 +52,7 @@ public class Config {
 		config = builder.build();
 	}
 
-	public ForgeConfigSpec getConfigSpec() {
+	public ModConfigSpec getConfigSpec() {
 		return config;
 	}
 
