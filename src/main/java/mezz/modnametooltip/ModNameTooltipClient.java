@@ -1,8 +1,5 @@
 package mezz.modnametooltip;
 
-
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -25,6 +22,7 @@ public class ModNameTooltipClient {
 		addListener(modBus, ModConfigEvent.class, EventPriority.NORMAL, config::onConfigChanged);
 		addListener(eventBus, ItemTooltipEvent.class, EventPriority.LOW, tooltipEventHandler::onToolTip);
 	}
+	
 	private static <T extends Event> void addListener(IEventBus eventBus, Class<T> eventType, EventPriority priority, Consumer<T> listener) {
 		eventBus.addListener(priority, false, eventType, listener);
 	}
