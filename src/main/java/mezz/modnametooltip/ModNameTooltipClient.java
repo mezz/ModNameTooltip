@@ -15,7 +15,7 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.function.Consumer;
 
-@Mod("modnametooltip")
+@Mod(Constants.MOD_ID)
 public class ModNameTooltipClient {
 	public ModNameTooltipClient(IEventBus modBus) {
 		Config config = new Config();

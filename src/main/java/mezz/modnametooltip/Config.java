@@ -81,7 +81,7 @@ public class Config {
 	}
 
 	public void onConfigChanged(ModConfigEvent event) {
-		if ("modnametooltip".equals(event.getConfig().getModId())) {
+		if (Constants.MOD_ID.equals(event.getConfig().getModId())) {
 			cachedModNameFormat = null;
 		}
 	}
