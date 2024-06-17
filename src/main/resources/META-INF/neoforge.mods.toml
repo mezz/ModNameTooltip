@@ -7,7 +7,7 @@
 modLoader="javafml" #mandatory
 
 # A version range to match for said mod loader - for regular FML @Mod it will be the minecraft version (without the 1.)
-loaderVersion="${neo_version}" #mandatory
+loaderVersion="${neoVersion}" #mandatory
 
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your
 # redistributive properties. Review your options at https://choosealicense.com/. All rights
@@ -30,32 +30,32 @@ displayURL="https://curseforge.com/minecraft/mc-mods/mod-name-tooltip" #optional
 #credits="Thanks for this example mod goes to Java" #optional
 
 # A text field displayed in the mod UI
-authors="mezz" #optional
+authors="${modAuthors}" #optional
 
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 
 # The modid of the mod
-modId="modnametooltip" #mandatory
+modId="${modId}" #mandatory
 
 displayTest="IGNORE_ALL_VERSION"
 
 # The version number of the mod
-version="${mod_version}" #mandatory
+version="${modVersion}" #mandatory
 
 # A display name for the mod
-displayName="Mod Name Tooltip" #mandatory
+displayName="${modName}" #mandatory
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-On ItemStack tooltips, shows which mod the item is from.
+${modDescription}
 '''
 
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.modnametooltip]]
     modId="neoforge" #mandatory
 
-    versionRange="${neo_version_range}" #mandatory
+    versionRange="${neoVersionRange}" #mandatory
 	# An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 	ordering="NONE"
 	# Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -63,7 +63,7 @@ On ItemStack tooltips, shows which mod the item is from.
 
 [[dependencies.modnametooltip]]
 	modId="minecraft" #mandatory
-	versionRange="[1.20.4,1.21)" #mandatory
+	versionRange="${minecraftVersionRange}" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER

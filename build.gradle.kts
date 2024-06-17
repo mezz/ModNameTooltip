@@ -4,39 +4,41 @@ plugins {
     id("idea")
     id("maven-publish")
     // https://projects.neoforged.net/neoforged/neogradle
-    id("net.neoforged.gradle.userdev") version("7.0.142")
+    id("net.neoforged.gradle.userdev") version("7.0.143")
 }
 
 // gradle.properties
-val mod_version: String by extra
-val mod_group_id: String by extra
-val minecraft_version: String by extra
-val mod_id: String by extra
-val neo_version: String by extra
-val neo_version_range: String by extra
-val loader_version_range: String by extra
-val minecraft_version_range: String by extra
-val mod_authors: String by extra
-val mod_description: String by extra
-val mod_name: String by extra
-val mod_license: String by extra
-val mod_java_version: String by extra
+val loaderVersionRange: String by extra
+val minecraftVersion: String by extra
+val minecraftVersionRange: String by extra
+val modAuthors: String by extra
+val modDescription: String by extra
+val modGroupId: String by extra
+val modId: String by extra
+val modJavaVersion: String by extra
+val modLicense: String by extra
+val modName: String by extra
+val modVersion: String by extra
+val neoVersion: String by extra
+val neoVersionRange: String by extra
+val parchmentMappingsMinecraftVersion: String by extra
+val parchmentMappingsVersion: String by extra
 
-version = mod_version
-group = mod_group_id
+version = modVersion
+group = modGroupId
 
 repositories {
     mavenLocal()
 }
 
-val baseArchivesName = "${mod_id}-${minecraft_version}-neoforge"
+val baseArchivesName = "${modId}-${minecraftVersion}-neoforge"
 base {
     archivesName.set(baseArchivesName)
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(mod_java_version))
+        languageVersion.set(JavaLanguageVersion.of(modJavaVersion))
     }
 }
 
@@ -71,23 +73,23 @@ sourceSets {
 }
 
 dependencies {
-    implementation("net.neoforged:neoforge:${neo_version}")
+    implementation("net.neoforged:neoforge:${neoVersion}")
 }
 
 tasks.withType<ProcessResources>().configureEach {
     filesMatching(listOf("META-INF/neoforge.mods.toml")) {
         expand(mapOf(
-            "neo_version" to neo_version,
-            "neo_version_range" to neo_version_range,
-            "loader_version_range" to loader_version_range,
-            "minecraft_version" to minecraft_version,
-            "minecraft_version_range" to minecraft_version_range,
-            "mod_authors" to mod_authors,
-            "mod_description" to mod_description,
-            "mod_id" to mod_id,
-            "mod_name" to mod_name,
-            "mod_license" to mod_license,
-            "mod_version" to mod_version,
+            "neoVersion" to neoVersion,
+            "neoVersionRange" to neoVersionRange,
+            "loaderVersionRange" to loaderVersionRange,
+            "minecraftVersion" to minecraftVersion,
+            "minecraftVersionRange" to minecraftVersionRange,
+            "modAuthors" to modAuthors,
+            "modDescription" to modDescription,
+            "modId" to modId,
+            "modName" to modName,
+            "modLicense" to modLicense,
+            "modVersion" to modVersion,
         ))
     }
 }
@@ -110,7 +112,7 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     javaToolchains {
         compilerFor {
-            languageVersion.set(JavaLanguageVersion.of(mod_java_version))
+            languageVersion.set(JavaLanguageVersion.of(modJavaVersion))
         }
     }
 }
@@ -120,5 +122,35 @@ idea {
     module {
         isDownloadSources = true
         isDownloadJavadoc = true
+    }
+}
+
+subsystems {
+    parchment {
+        // The Minecraft version for which the Parchment mappings were created.
+        // This does not necessarily need to match the Minecraft version your mod targets
+        // Defaults to the value of Gradle property neogradle.subsystems.parchment.minecraftVersion
+        minecraftVersion = parchmentMappingsMinecraftVersion
+
+        // The version of Parchment mappings to apply.
+        // See https://parchmentmc.org/docs/getting-started for a list.
+        // Defaults to the value of Gradle property neogradle.subsystems.parchment.mappingsVersion
+        mappingsVersion = parchmentMappingsVersion
+
+        // Overrides the full Maven coordinate of the Parchment artifact to use
+        // This is computed from the minecraftVersion and mappingsVersion properties by default.
+        // If you set this property explicitly, minecraftVersion and mappingsVersion will be ignored.
+        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.parchmentArtifact
+        // parchmentArtifact = "org.parchmentmc.data:parchment-$minecraftVersion:$mappingsVersion:checked@zip"
+
+        // Set this to false if you don't want the https://maven.parchmentmc.org/ repository to be added automatically when
+        // applying Parchment mappings is enabled
+        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.addRepository
+        // addRepository = true
+
+        // Can be used to explicitly disable this subsystem. By default, it will be enabled automatically as soon
+        // as parchmentArtifact or minecraftVersion and mappingsVersion are set.
+        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.enabled
+        // enabled = true
     }
 }
