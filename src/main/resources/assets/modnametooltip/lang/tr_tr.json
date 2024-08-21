@@ -1,0 +1,4 @@
+{
+    "config.modnametooltip.formatting.modNameFormat": "Mod Adı Biçimi",
+    "config.modnametooltip.formatting.modNameFormat.comment": "Mod adının alet ipucunda nasıl biçimlendirilmesi gerektiği. Devre dışı bırakmak için boş bırakın."
+}
