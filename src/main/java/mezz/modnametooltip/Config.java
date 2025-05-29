@@ -74,7 +74,7 @@ public class Config {
 			if (valueByName != null) {
 				format.append(valueByName);
 			} else {
-				LOGGER.error("Invalid format: " + string);
+				LOGGER.error("Invalid format: {}", string);
 			}
 		}
 		return format.toString();

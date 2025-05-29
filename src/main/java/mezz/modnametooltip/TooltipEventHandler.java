@@ -59,7 +59,7 @@ public class TooltipEventHandler {
 
 	private static boolean isModNameAlreadyPresent(List<Component> tooltip, String modName) {
 		if (tooltip.size() > 1) {
-			Component line = tooltip.get(tooltip.size() - 1);
+			Component line = tooltip.getLast();
 			String lineString = line.getString();
 			String withoutFormatting = ChatFormatting.stripFormatting(lineString);
 			return modName.equals(withoutFormatting);
