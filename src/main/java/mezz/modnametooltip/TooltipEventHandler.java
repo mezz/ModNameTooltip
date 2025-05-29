@@ -1,9 +1,11 @@
 package mezz.modnametooltip;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -45,8 +47,10 @@ public class TooltipEventHandler {
 			return Optional.empty();
 		}
 		Item item = itemStack.getItem();
-		String creatorModId = item.getCreatorModId(itemStack);
-		return Optional.ofNullable(creatorModId);
+		return Optional.ofNullable(Minecraft.getInstance())
+			.flatMap(minecraft -> Optional.ofNullable(minecraft.level))
+			.map(Level::registryAccess)
+			.map(registryAccess -> item.getCreatorModId(registryAccess, itemStack));
 	}
 
 	private static String getModName(String modId) {
