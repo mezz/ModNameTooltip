@@ -4,7 +4,6 @@ import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -15,11 +14,10 @@ import java.util.function.Consumer;
 
 @Mod(Constants.MOD_ID)
 public class ModNameTooltipClient {
-	public ModNameTooltipClient(IEventBus modBus) {
+  
+	public ModNameTooltipClient(IEventBus modBus, ModContainer modContainer) {
 		Config config = new Config();
-		ModLoadingContext modLoadingContext = ModLoadingContext.get();
-		ModContainer activeContainer = modLoadingContext.getActiveContainer();
-		activeContainer.registerConfig(ModConfig.Type.CLIENT, config.getConfigSpec());
+		modContainer.registerConfig(ModConfig.Type.CLIENT, config.getConfigSpec());
 		TooltipEventHandler tooltipEventHandler = new TooltipEventHandler(config);
 		IEventBus eventBus = NeoForge.EVENT_BUS;
 		addListener(modBus, ModConfigEvent.class, EventPriority.NORMAL, config::onConfigChanged);

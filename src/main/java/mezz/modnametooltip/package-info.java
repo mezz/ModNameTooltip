@@ -4,5 +4,3 @@
 package mezz.modnametooltip;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import net.minecraft.MethodsReturnNonnullByDefault;
