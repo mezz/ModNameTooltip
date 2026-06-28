@@ -1,6 +1,7 @@
 package mezz.modnametooltip;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TextColor;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.logging.log4j.LogManager;
@@ -30,10 +31,10 @@ public class Config {
 		StringJoiner validFormatsJoiner = new StringJoiner(", ");
 
 		for (ChatFormatting chatFormatting : validFormatting) {
-			String lowerCaseName = chatFormatting.getName().toLowerCase(Locale.ENGLISH);
-			if (chatFormatting.isColor()) {
+			String lowerCaseName = chatFormatting.name().toLowerCase(Locale.ENGLISH);
+			if (isColor(chatFormatting)) {
 				validColorsJoiner.add(lowerCaseName);
-			} else if (chatFormatting.isFormat()) {
+			} else if (isFormat(chatFormatting)) {
 				validFormatsJoiner.add(lowerCaseName);
 			}
 		}
@@ -57,20 +58,21 @@ public class Config {
 	}
 
 	public String getModNameFormat() {
+		String modNameFormat = modNameFormatFriendly.get();
+		if (modNameFormat.isBlank()) {
+			return "";
+		}
 		if (cachedModNameFormat == null) {
-			cachedModNameFormat = parseFriendlyModNameFormat(modNameFormatFriendly.get());
+			cachedModNameFormat = parseFriendlyModNameFormat(modNameFormat);
 		}
 		return cachedModNameFormat;
 	}
 
-	private static String parseFriendlyModNameFormat(String formatWithEnumNames) {
-		if (formatWithEnumNames.isEmpty()) {
-			return "";
-		}
+	private static String parseFriendlyModNameFormat(String formatNames) {
 		StringBuilder format = new StringBuilder();
-		String[] strings = formatWithEnumNames.split(" ");
+		String[] strings = formatNames.trim().split("\\s+");
 		for (String string : strings) {
-			ChatFormatting valueByName = ChatFormatting.getByName(string);
+			ChatFormatting valueByName = getByName(string);
 			if (valueByName != null) {
 				format.append(valueByName);
 			} else {
@@ -78,6 +80,23 @@ public class Config {
 			}
 		}
 		return format.toString();
+	}
+
+	private static boolean isColor(ChatFormatting chatFormatting) {
+		return TextColor.fromLegacyFormat(chatFormatting) != null;
+	}
+
+	private static boolean isFormat(ChatFormatting chatFormatting) {
+		return !isColor(chatFormatting) && chatFormatting != ChatFormatting.RESET;
+	}
+
+	@Nullable
+	private static ChatFormatting getByName(String name) {
+		try {
+			return ChatFormatting.valueOf(name.toUpperCase(Locale.ENGLISH));
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
 	}
 
 	public void onConfigChanged(ModConfigEvent event) {

@@ -4,7 +4,7 @@ plugins {
     id("idea")
     id("maven-publish")
     // https://projects.neoforged.net/neoforged/neogradle
-    id("net.neoforged.gradle.userdev") version("7.1.36")
+    id("net.neoforged.gradle.userdev") version("7.1.38")
 }
 
 // gradle.properties
