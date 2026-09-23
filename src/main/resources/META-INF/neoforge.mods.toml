@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="${neoVersion}" #mandatory
+loaderVersion="${loaderVersionRange}" #mandatory
 license="MIT" #mandatory
 #updateJSONURL="" #optional
 issueTrackerURL="https://github.com/mezz/${modId}/issues?q=is%3Aissue" #optional
@@ -16,12 +16,12 @@ description='''${modDescription}'''
 
 [[dependencies.${modId}]]
     modId="neoforge" #mandatory
-    versionRange="${neoVersion}" #mandatory
+    versionRange="${neoVersionRange}" #mandatory
 	ordering="NONE"
 	side="BOTH"
 
 [[dependencies.${modId}]]
 	modId="minecraft" #mandatory
-	versionRange="${minecraftVersion}" 
+	versionRange="${minecraftVersionRange}"
     ordering="NONE"
     side="CLIENT"
