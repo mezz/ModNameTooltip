@@ -3,24 +3,24 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    // https://projects.neoforged.net/neoforged/neogradle
-    id("net.neoforged.gradle.userdev") version("7.1.38")
+    // https://projects.neoforged.net/neoforged/moddevgradle
+    id("net.neoforged.moddev") version("2.0.147")
 }
 
 // gradle.properties
-val loaderVersionRange: String by extra
-val minecraftVersion: String by extra
-val minecraftVersionRange: String by extra
-val modAuthors: String by extra
-val modDescription: String by extra
-val modGroupId: String by extra
-val modId: String by extra
-val modJavaVersion: String by extra
-val modLicense: String by extra
-val modName: String by extra
-val modVersion: String by extra
-val neoVersion: String by extra
-val neoVersionRange: String by extra
+val loaderVersionRange = providers.gradleProperty("loaderVersionRange").get()
+val minecraftVersion = providers.gradleProperty("minecraftVersion").get()
+val minecraftVersionRange = providers.gradleProperty("minecraftVersionRange").get()
+val modAuthors = providers.gradleProperty("modAuthors").get()
+val modDescription = providers.gradleProperty("modDescription").get()
+val modGroupId = providers.gradleProperty("modGroupId").get()
+val modId = providers.gradleProperty("modId").get()
+val modJavaVersion = providers.gradleProperty("modJavaVersion").get()
+val modLicense = providers.gradleProperty("modLicense").get()
+val modName = providers.gradleProperty("modName").get()
+val modVersion = providers.gradleProperty("modVersion").get()
+val neoVersion = providers.gradleProperty("neoVersion").get()
+val neoVersionRange = providers.gradleProperty("neoVersionRange").get()
 
 version = modVersion
 group = modGroupId
@@ -40,24 +40,27 @@ java {
     }
 }
 
-// Default run configurations.
-// These can be tweaked, removed, or duplicated as needed.
-runs {
-    // applies to all the run configs below
-    configureEach {
-        // Recommended logging data for a userdev environment
-        // The markers can be added/remove as needed separated by commas.
-        // "SCAN": For mods scan.
-        // "REGISTRIES": For firing of registry events.
-        // "REGISTRYDUMP": For getting the contents of all registries.
-        systemProperty("forge.logging.markers", "REGISTRIES")
+neoForge {
+    version = neoVersion
 
-        // Recommended logging level for the console
-        // You can set various levels here.
-        // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-        systemProperty("forge.logging.console.level", "debug")
+    runs {
+        configureEach {
+            systemProperty("forge.logging.markers", "REGISTRIES")
+            logLevel.set(org.slf4j.event.Level.DEBUG)
+        }
+        create("client") {
+            client()
+        }
+        create("server") {
+            server()
+            programArgument("nogui")
+        }
+    }
 
-        modSources.add(project.name, sourceSets.main.get())
+    mods {
+        create(modId) {
+            sourceSet(sourceSets.main.get())
+        }
     }
 }
 
@@ -68,10 +71,6 @@ sourceSets {
             srcDir("src/generated/resources")
         }
     }
-}
-
-dependencies {
-    implementation("net.neoforged:neoforge:${neoVersion}")
 }
 
 tasks.withType<ProcessResources>().configureEach {
